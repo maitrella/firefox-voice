@@ -13,6 +13,16 @@ browser.browserAction.onClicked.addListener(async (triggeringTab) => {
   triggerExtension();
 });
 
+browser.runtime.onInstalled.addListener(async ({ reason, temporary, }) => {
+  if (temporary) return; // skip during development
+  switch (reason) {
+    case "install": {
+      const url = browser.runtime.getURL("https://www.mozilla.org/en-US/"); // redirect the user to the onboarding page (TBD once launched)
+      await browser.tabs.create({ url, });
+    } break;
+  }
+});
+
 browser.omnibox.setDefaultSuggestion({
   description: `Control Firefox through a text command (e.g. Play Hamilton on YouTube)`
 });
