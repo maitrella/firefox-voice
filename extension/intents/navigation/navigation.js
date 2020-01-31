@@ -184,6 +184,17 @@ this.intents.navigation = (function() {
     },
   });
 
+  this.intentRunner.registerIntent({
+    name: "navigation.openExtensions",
+    description: "Opens add-ons/extensions manager",
+    match: `
+    (open | manage |) (add-on | extensions | add-ons) (manager |)
+    `,
+    async run(context) {
+      await browser.tabs.create({ url: "about:addons" });
+    },
+  });
+
   async function loadQueryDatabase() {
     const result = await browser.storage.local.get(["queryDatabase"]);
     if (result && result.queryDatabase) {
